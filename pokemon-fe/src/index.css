@@ -1,0 +1,16 @@
+@keyframes skeleton-loading {
+  0% {
+    background-color: #e2e8f0;
+  }
+  50% {
+    background-color: #cbd5e1;
+  }
+  100% {
+    background-color: #e2e8f0;
+  }
+}
+
+.skeleton {
+  animation: skeleton-loading 1.5s infinite ease-in-out;
+  border-radius: 8px;
+}

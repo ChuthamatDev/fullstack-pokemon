@@ -1,20 +1,19 @@
 import { useState, useCallback } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-
-// กำหนด Type ห้ามใช้ any เด็ดขาด
+import { useAuth } from './useAuth';
 export interface PokemonData {
     name: string;
     types: string[];
     weight: number;
     abilities: string[];
+    image: string;
 }
 
 export const usePokemon = () => {
     const [pokemon, setPokemon] = useState<PokemonData | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    const navigate = useNavigate();
+    const { logout } = useAuth();
 
     const fetchPokemon = useCallback(async (endpoint: string, requiresAuth: boolean = true) => {
         setIsLoading(true);
@@ -24,11 +23,10 @@ export const usePokemon = () => {
         try {
             const headers: Record<string, string> = {};
 
-            // ถ้า Endpoint ไหนต้องใช้ JWT เราจะแนบไปด้วย
             if (requiresAuth) {
                 const token = localStorage.getItem('access_token');
                 if (!token) {
-                    navigate('/login'); // ไม่มี Token เด้งกลับทันที
+                    logout();
                     return;
                 }
                 headers['Authorization'] = `Bearer ${token}`;
@@ -39,11 +37,9 @@ export const usePokemon = () => {
         } catch (err) {
             if (axios.isAxiosError(err)) {
                 if (err.response?.status === 401) {
-                    // Token หมดอายุ หรือไม่ถูกต้อง
-                    localStorage.removeItem('access_token');
-                    navigate('/login');
+                    logout();
                 } else if (err.response?.status === 404) {
-                    setError('Pokemon not found!'); // หาไม่เจอโชว์ Error ตามข้อกำหนด
+                    setError('Pokemon not found!');
                 } else {
                     setError(err.response?.data?.message || 'Failed to fetch data');
                 }
@@ -53,9 +49,9 @@ export const usePokemon = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [navigate]);
+    }, [logout]);
 
-    // ฟังก์ชันสำหรับค้นหาชื่อ และ ฟังก์ชันสุ่ม
+
     const searchPokemon = (name: string) => fetchPokemon(`/pokemon/${name.toLowerCase()}`, true);
     const getRandomPokemon = () => fetchPokemon('/pokemon/random', false);
 
