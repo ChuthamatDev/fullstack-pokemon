@@ -18,8 +18,8 @@ export const PokemonSearchForm: React.FC<Props> = ({ searchTerm, setSearchTerm, 
             gap: '15px',
             justifyContent: 'center',
             width: '100%',
-            marginTop: hasResults ? '3vh' : '25vh',
-            marginBottom: '3vh',
+            marginTop: hasResults ? '2vh' : '25vh',
+            marginBottom: '4vh',
             transition: 'margin-top 0.4s ease-in-out'
         }}>
             <Input

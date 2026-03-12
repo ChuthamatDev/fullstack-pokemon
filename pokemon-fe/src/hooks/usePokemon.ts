@@ -9,9 +9,16 @@ export interface PokemonData {
     image: string;
 }
 
+export interface PokemonListResult {
+    name: string;
+    url: string;
+}
+
 export const usePokemon = () => {
     const [pokemon, setPokemon] = useState<PokemonData | null>(null);
+    const [pokemonList, setPokemonList] = useState<PokemonListResult[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isListLoading, setIsListLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const { logout } = useAuth();
 
@@ -52,8 +59,25 @@ export const usePokemon = () => {
     }, [logout]);
 
 
+    const clearPokemon = useCallback(() => {
+        setPokemon(null);
+        setError(null);
+    }, []);
+
     const searchPokemon = (name: string) => fetchPokemon(`/pokemon/${name.toLowerCase()}`, true);
     const getRandomPokemon = () => fetchPokemon('/pokemon/random', false);
 
-    return { pokemon, isLoading, error, searchPokemon, getRandomPokemon };
+    const fetchInitialList = useCallback(async () => {
+        setIsListLoading(true);
+        try {
+            const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=20');
+            setPokemonList(response.data.results);
+        } catch (e) {
+            console.error("Failed to fetch initial pokemon list", e);
+        } finally {
+            setIsListLoading(false);
+        }
+    }, []);
+
+    return { pokemon, pokemonList, isLoading, isListLoading, error, searchPokemon, getRandomPokemon, fetchInitialList, clearPokemon };
 };

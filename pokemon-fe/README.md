@@ -1,73 +1,74 @@
-# React + TypeScript + Vite
+# 🎮 Pokémon Pokedex Web Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+แอปพลิเคชันค้นหาและแสดงข้อมูลโปเกมอนที่พัฒนาด้วย **React** + **TypeScript** มาพร้อมกับระบบ Authentication แบบ JWT โดยแบ่งแยกโครงสร้างโค้ดแบบ Clean Architecture ตามหลัก **SRP (Single Responsibility Principle)** และ **KISS (Keep It Simple, Stupid)**
 
-Currently, two official plugins are available:
+![Pokemon Dashboard](./public/images/pokemon-dashboard.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## ✨ พรีวิวหน้าอื่นๆ
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+<div align="center">
+  <img src="./public/images/login-page.png" width="45%" alt="Login Page">
+  <img src="./public/images/register-page.png" width="45%" alt="Register Page">
+  <img src="./public/images/pikachu-pokemon.png" width="45%" alt="Pokemon Details">
+</div>
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 ฟีเจอร์หลัก
+* **Authentication:** ระบบ Login และ Register ผ่านระบบ JWT Protected Routes
+* **Auto-Fetch Initial List:** แสดงผลตะกรก้าโปเกมอนเริ่มต้น (Initial Grid List) ในทันทีที่เข้าหน้าเว็บ
+* **Dynamic Search Form:** ค้นหาโปเกมอนตามชื่อได้อย่างรวดเร็ว
+* **Pokemon Card & Details:** แสดงข้อมูลสำคัญ เช่น รูปร่าง, น้ำหนัก, ความสามารถหลัก, และแสดงสีพื้นหลังอิงตาม Type ของโปเกมอนแต่ละตัว
+* **Random System:** ระบบสุ่มโปเกมอนแบบสุ่ม!
+* **UX/UI Interactive State:** 
+  * Animated Input Forms
+  * Hover Grid Floating Status
+  * Pokemon Card Skeleton Loaders
+  * Interactive Back Buttons
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🛠️ ระบบ Environment Variables ปรับแต่งตั้งค่า (.env)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+แนะนำให้สร้างไฟล์ `.env` ที่ root ของโปรเจกต์ฝั่งหน้าบ้านก่อนเริ่มรันโปรเจกต์ เพื่อความสะดวกต่อระบบ
+
+```env
+# ยกตัวอย่างไฟล์ .env ของฝั่ง Frontend
+VITE_API_URL=http://localhost:3000
+```
+> **หมายเหตุ:** โปรเจกต์มีการเรียก Backend ไปที่ API Gateway `http://localhost:3000` สามารถแก้ไข baseURL หากเปลี่ยน Port ทางฝั่ง Backend ผ่านไฟล์ `src/hooks/usePokemon.ts` หรือ `src/hooks/useAuth.ts`
+
+---
+
+## ⚙️ วิธีติดตั้งและการใช้งาน (How to run)
+
+1. ทำการ Clone โปรเจคนี้มายังเครื่องของคุณ
+2. เข้าสู่โฟลเดอร์ฝั่งหน้าบ้าน (`pokemon-fe`)
+3. ตรวจสอบให้แน่ใจว่าได้ทำการ Start Server ของฝั่ง Backend ไว้อยู่แล้ว
+
+```bash
+# 1. ติดตั้ง Dependencies พื้นฐาน
+npm install
+
+# 2. รันแอปพลิเคชันในโหมดนักพัฒนา (Development Server)
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+หลังจากนั้นสามารถเปิดเว็บบราวเซอร์ของคุณไปที่พอร์ตเริ่มต้นที่ระบบเปิด เช่น `http://localhost:5173/` !
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 📦 โครงสร้างการแยกส่วนที่สำคัญ (Component Refactoring)
+
+โปรเจกต์ชุดนี้ผ่านกระบวนการทำ **Refactoring** จัดแยก `PokemonPage.tsx` ออกตามสถาปัตยกรรมที่ถูกต้อง:
+
+* **`/components/ui/`**: เก็บ `Input.tsx` และ `Button.tsx` (Global UI Components สามารถเรียกใช้ซ้ำได้)
+* **`/components/PokemonCard.tsx`**: ทำหน้าที่แสดงผลข้อมูลในตัวการ์ดและการผูกสี Background Dynamic (SRP)
+* **`/components/PokemonList.tsx`**: ทำหน้าที่แสดงผล Grid อัจฉริยะแบบเลื่อนสกอร์ของรายชื่อแบบเริ่มต้น
+* **`/components/PokemonSearchForm.tsx`**: ฟอร์มค้นหาที่มีการแยกสเตตและแอนิเมชันขยับขึ้นลง (SRP)
+* **`/components/PokemonSkeleton.tsx`**: ชุด UI จำลองตอนระหว่างรอ Backend ตอบกลับ (Loading State)
+
+---
+*Created carefully as an advanced UI/UX responsive Pokemon solution.*
